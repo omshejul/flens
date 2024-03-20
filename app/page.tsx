@@ -25,7 +25,6 @@ type ResultData = {
   error?: string;
 } | null;
 const CameraApp: React.FC = () => {
-
   const [facingMode, setFacingMode] = useState("environment");
   const [captureState, setCaptureState] = useState(false);
   const [resultSend, setResultSend] = useState(false);
@@ -40,7 +39,7 @@ const CameraApp: React.FC = () => {
         track.stop();
       });
     };
-  
+
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices
         .getUserMedia({ video: { facingMode: facingMode } })
@@ -49,7 +48,7 @@ const CameraApp: React.FC = () => {
           if (videoRef.current && videoRef.current.srcObject) {
             stopMediaTracks(videoRef.current.srcObject as MediaStream);
           }
-  
+
           if (videoRef.current) {
             videoRef.current.srcObject = stream;
             videoRef.current.play();
@@ -59,7 +58,7 @@ const CameraApp: React.FC = () => {
           console.error("Error accessing the camera:", error);
         });
     }
-  
+
     // Return a cleanup function that stops all tracks when the component unmounts
     // or before running the effect again
     return () => {
@@ -68,7 +67,6 @@ const CameraApp: React.FC = () => {
       }
     };
   }, [facingMode]); // Include facingMode in the dependency array
-  
 
   const capturePhoto = (): void => {
     console.log("captured photo");
@@ -91,15 +89,15 @@ const CameraApp: React.FC = () => {
     setResultData(null);
   };
   const changeFacingMode = (): void => {
-    console.log("facingMode:"+facingMode);
-    
+    console.log("facingMode:" + facingMode);
+
     if (facingMode == "environment") {
-      setFacingMode("user")
+      setFacingMode("user");
     }
     if (facingMode == "user") {
-      setFacingMode("environment")
+      setFacingMode("environment");
     }
-  }
+  };
   const closeResult = (): void => {
     setCaptureState(false);
     setResultData(null);
@@ -152,7 +150,7 @@ const CameraApp: React.FC = () => {
           onClick={discardPhoto}
           className={`close-btn btn ${captureState ? "flex" : "hidden"}`}
         >
-                    <div className="label">Discard</div>
+          <div className="label">Discard</div>
           <CloseIcon size={36} fill="#8d0606" />
         </button>
         <button
@@ -215,7 +213,9 @@ const CameraApp: React.FC = () => {
               )}
             </>
           ) : (
-            <p className="loading flex justify-center items-center text-center"><FadeLoader color="#ffffff" /></p>
+            <p className="loading flex justify-center items-center text-center">
+              <FadeLoader color="#ffffff" />
+            </p>
           )}
         </div>
       </div>

@@ -27,13 +27,16 @@
   transform: translate(-50%, 2px);
   transition: all 50ms ease-in-out;
 }
+.btn > svg{
+  padding: 0.25rem;
+}
 .wrapper {
   height: 100svh;
   height: 100cqb;
 }
 .close-btn {
-  background-color: rgb(216, 30, 30);
-  border: 3px solid rgb(135, 33, 33);
+  background-color: rgb(250, 75, 75);
+  border: 3px solid hsla(0, 0%, 0%, 0.5);
   padding: 0.5rem 1rem;
   left: calc(1 / 4 * 100%);
 }
@@ -44,8 +47,8 @@
   left: calc(1 / 4 * 100%);
 }
 .send-btn {
-  background-color: rgb(72, 238, 89);
-  border: 3px solid rgb(43, 127, 51);
+  background-color: rgb(102, 255, 117);
+  border: 3px solid hsla(0, 0%, 0%, 0.5);
   padding: 0.5rem 1rem;
 
   left: calc(3 / 4 * 100%);
