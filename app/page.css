@@ -54,7 +54,6 @@
   left: calc(3 / 4 * 100%);
 }
 .resultContainer{
-  display: grid;
 justify-content: center;
   position: absolute;
   width: 100%;
@@ -63,7 +62,7 @@ justify-content: center;
   transform: translate(-50%, 0%);
   height: 100%;
   overflow-y: scroll;
-
+  z-index: 2;
 }
 .result {
   max-width: min(30rem, 90vw);
@@ -75,7 +74,6 @@ justify-content: center;
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 1rem;
   color: white;
-  z-index: 2;
 }
 .result > h2 {
   margin: 0.5rem;
