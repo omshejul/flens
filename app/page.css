@@ -49,10 +49,11 @@
   position: absolute;
   padding: 1rem;
   width: 100%;
+  margin-top: 1rem;
   max-width: min(30rem, 90vw);
-  top: 50%;
+  top: 0%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 0%);
   background: #33333369;
   backdrop-filter: blur(2rem);
   box-shadow: 0 0 2rem rgba(0, 0, 0, 0.5);
@@ -81,7 +82,7 @@
   top: 0;
   right: 0;
   margin: 0.5rem;
-  background: #757575;
+  background: #981f1f;
   border-radius: 50vw;
   padding: 0.2rem;
 }

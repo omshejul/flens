@@ -79,7 +79,7 @@ const CameraApp: React.FC = () => {
       return;
     }
 
-    const imageDataUrl = canvasRef.current.toDataURL("image/png");
+    const imageDataUrl = canvasRef.current.toDataURL("image/jpg");
 
     const postData = {
       image: imageDataUrl,
