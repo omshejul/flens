@@ -158,7 +158,7 @@ const CameraApp: React.FC = () => {
           onClick={changeFacingMode}
           className={`facing-mode-btn btn ${captureState ? "hidden" : ""}`}
         >
-          <SwitchCameraIcon size={48} fill="#333" />
+          <SwitchCameraIcon size={48} fill="#ffffff" />
         </button>
         <button
           onClick={capturePhoto}
