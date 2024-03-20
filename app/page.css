@@ -11,6 +11,7 @@
 }
 .btn {
   position: absolute;
+  place-items: center;
   bottom: 10%;
   left: 50%;
   transform: translateX(-50%);
@@ -26,30 +27,28 @@
   transform: translate(-50%, 2px);
   transition: all 50ms ease-in-out;
 }
-.btn > img {
-  width: 4rem;
-  height: 4rem;
-}
 .wrapper {
   height: 100svh;
   height: 100cqb;
 }
 .close-btn {
-  background-color: rgba(255, 178, 178, 0.8);
-  border: 3px solid rgb(216, 30, 30);
-
-  left: calc(1 / 3 * 100%);
+  background-color: rgb(216, 30, 30);
+  border: 3px solid rgb(135, 33, 33);
+  padding: 0.5rem 1rem;
+  left: calc(1 / 4 * 100%);
 }
 .facing-mode-btn {
   background-color: #333;
   border: 3px solid rgb(85, 85, 85);
   scale: 0.75;
-  left: calc(1/4 * 100%);
+  left: calc(1 / 4 * 100%);
 }
 .send-btn {
-  background-color: rgba(182, 255, 220, 0.8);
-  border: 3px solid rgb(72, 238, 89);
-  left: calc(2 / 3 * 100%);
+  background-color: rgb(72, 238, 89);
+  border: 3px solid rgb(43, 127, 51);
+  padding: 0.5rem 1rem;
+
+  left: calc(3 / 4 * 100%);
 }
 .result {
   position: absolute;
@@ -89,7 +88,7 @@
   top: 0;
   right: 0;
   margin: 0.5rem;
-  background: #7F0609;
+  background: #7f0609;
   border: 1.75px solid #ff756d;
   box-shadow: 0 0 2rem rgba(0, 0, 0, 0.25);
   border-radius: 50vw;

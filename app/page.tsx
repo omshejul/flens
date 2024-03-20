@@ -150,27 +150,29 @@ const CameraApp: React.FC = () => {
         ></video>
         <button
           onClick={discardPhoto}
-          className={`close-btn btn ${captureState ? "" : "hidden"}`}
+          className={`close-btn btn ${captureState ? "flex" : "hidden"}`}
         >
-          <CloseIcon size={48} fill="#8d0606" />
+                    <div className="label">Discard</div>
+          <CloseIcon size={36} fill="#8d0606" />
         </button>
         <button
           onClick={changeFacingMode}
-          className={`facing-mode-btn btn ${captureState ? "hidden" : ""}`}
+          className={`facing-mode-btn btn ${captureState ? "hidden" : "flex"}`}
         >
           <SwitchCameraIcon size={48} fill="#ffffff" />
         </button>
         <button
           onClick={capturePhoto}
-          className={`capture-btn btn ${captureState ? "hidden" : ""}`}
+          className={`capture-btn btn ${captureState ? "hidden" : "flex"}`}
         >
           <CaptureIcon size={48} fill="#333" />
         </button>
         <button
           onClick={sendPhoto}
-          className={`send-btn btn ${captureState ? "" : "hidden"}`}
+          className={`send-btn btn ${captureState ? "flex" : "hidden"}`}
         >
-          <DoneIcon size={48} fill="#11841d" />
+          <div className="label">Upload</div>
+          <DoneIcon size={36} fill="#11841d" />
         </button>
         <canvas
           ref={canvasRef}
