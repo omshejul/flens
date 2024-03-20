@@ -176,47 +176,51 @@ const CameraApp: React.FC = () => {
           ref={canvasRef}
           className={`canvas ${captureState ? "" : "hidden"}`}
         ></canvas>
-        <div className={`result ${resultSend ? "" : "hidden"}`}>
-          {resultData && resultData.error ? (
-            <div className="error-message text-center">{resultData.error}</div>
-          ) : resultData && resultData.data ? (
-            <>
-              <button onClick={closeResult} className="closeBtn">
-                <CloseIcon size={24} fill="#ff756d" />
-              </button>
-              <h2>Nutritional Information:&emsp;</h2>
-              <div className="pill">Protein: {resultData.data.protein}</div>
-              <div className="pill">
-                Carbohydrates: {resultData.data.carbohydrates}
+        <div className={`resultContainer ${resultSend ? "" : "hidden"}`}>
+          <div className={`result ${resultSend ? "" : "hidden"}`}>
+            {resultData && resultData.error ? (
+              <div className="error-message text-center">
+                {resultData.error}
               </div>
-              <div className="pill">Fats: {resultData.data.fats}</div>
-              <div className="pill">Sugars: {resultData.data.sugars}</div>
-              <div className="pill">
-                Calories: {resultData.data.calories} kcal
-              </div>
-              <h3>Other:</h3>
-              <div className="other-container">
+            ) : resultData && resultData.data ? (
+              <>
+                <button onClick={closeResult} className="closeBtn">
+                  <CloseIcon size={24} fill="#ff756d" />
+                </button>
+                <h2>Nutritional Information:&emsp;</h2>
+                <div className="pill">Protein: {resultData.data.protein}</div>
                 <div className="pill">
-                  Fiber: {resultData.data.other_nutrients.fiber}
+                  Carbohydrates: {resultData.data.carbohydrates}
                 </div>
+                <div className="pill">Fats: {resultData.data.fats}</div>
+                <div className="pill">Sugars: {resultData.data.sugars}</div>
                 <div className="pill">
-                  Sodium: {resultData.data.other_nutrients.sodium}
+                  Calories: {resultData.data.calories} kcal
                 </div>
-                <div className="pill">
-                  Cholesterol: {resultData.data.other_nutrients.cholesterol}
+                <h3>Other:</h3>
+                <div className="other-container">
+                  <div className="pill">
+                    Fiber: {resultData.data.other_nutrients.fiber}
+                  </div>
+                  <div className="pill">
+                    Sodium: {resultData.data.other_nutrients.sodium}
+                  </div>
+                  <div className="pill">
+                    Cholesterol: {resultData.data.other_nutrients.cholesterol}
+                  </div>
                 </div>
-              </div>
-              {resultData.suggestion && (
-                <div className="suggestion pill flex">
-                  {resultData.suggestion}
-                </div>
-              )}
-            </>
-          ) : (
-            <p className="loading flex justify-center items-center text-center">
-              <FadeLoader color="#ffffff" />
-            </p>
-          )}
+                {resultData.suggestion && (
+                  <div className="suggestion pill flex">
+                    {resultData.suggestion}
+                  </div>
+                )}
+              </>
+            ) : (
+              <p className="loading flex justify-center items-center text-center">
+                <FadeLoader color="#ffffff" />
+              </p>
+            )}
+          </div>{" "}
         </div>
       </div>
     </>
