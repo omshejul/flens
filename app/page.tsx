@@ -141,7 +141,7 @@ const CameraApp: React.FC = () => {
           ) : resultData && resultData.data ? (
             <>
               <button onClick={closeResult} className="closeBtn">
-                <CloseIcon size={24} fill="#ffffff" />
+                <CloseIcon size={24} fill="#ff756d" />
               </button>
               <h2>Nutritional Information:&emsp;</h2>
               <div className="pill">Protein: {resultData.data.protein}</div>
