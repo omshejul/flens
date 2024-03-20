@@ -20,6 +20,7 @@ type NutrientData = {
 type ResultData = {
   data: NutrientData;
   suggestion?: string;
+  error?: string;
 } | null;
 const CameraApp: React.FC = () => {
   const [captureState, setCaptureState] = useState(false);
@@ -85,7 +86,7 @@ const CameraApp: React.FC = () => {
     };
     console.log(postData);
 
-    fetch("https://arthkin.el.r.appspot.com/flens", {
+    fetch("http://localhost:5001/flens", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -135,10 +136,9 @@ const CameraApp: React.FC = () => {
           className={`canvas ${captureState ? "" : "hidden"}`}
         ></canvas>
         <div className={`result ${resultSend ? "" : "hidden"}`}>
-          {resultData &&
-          resultData.data &&
-          typeof resultData.data === "object" &&
-          Object.keys(resultData.data).length > 0 ? (
+          {resultData && resultData.error ? (
+            <div className="error-message text-center">{resultData.error}</div>
+          ) : resultData && resultData.data ? (
             <>
               <button onClick={closeResult} className="closeBtn">
                 <CloseIcon size={24} fill="#ffffff" />
@@ -150,9 +150,11 @@ const CameraApp: React.FC = () => {
               </div>
               <div className="pill">Fats: {resultData.data.fats}</div>
               <div className="pill">Sugars: {resultData.data.sugars}</div>
-              <div className="pill">Calories: {resultData.data.calories}kcal</div>
+              <div className="pill">
+                Calories: {resultData.data.calories} kcal
+              </div>
               <h3>Other:</h3>
-              <ul>
+              <div className="other-container">
                 <div className="pill">
                   Fiber: {resultData.data.other_nutrients.fiber}
                 </div>
@@ -162,7 +164,7 @@ const CameraApp: React.FC = () => {
                 <div className="pill">
                   Cholesterol: {resultData.data.other_nutrients.cholesterol}
                 </div>
-              </ul>
+              </div>
               {resultData.suggestion && (
                 <div className="suggestion pill flex">
                   {resultData.suggestion}
@@ -170,7 +172,7 @@ const CameraApp: React.FC = () => {
               )}
             </>
           ) : (
-            <p>Loading...</p>
+            <p className="loading">Loading...</p>
           )}
         </div>
       </div>
