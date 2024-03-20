@@ -67,6 +67,7 @@ justify-content: center;
 .result {
   max-width: min(30rem, 90vw);
   margin-block: 1rem;
+  height: max-content;
   padding: 1rem;
   background: #33333369;
   backdrop-filter: blur(2rem);

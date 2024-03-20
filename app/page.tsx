@@ -176,7 +176,7 @@ const CameraApp: React.FC = () => {
           ref={canvasRef}
           className={`canvas ${captureState ? "" : "hidden"}`}
         ></canvas>
-        <div className={`resultContainer ${resultSend ? "" : "hidden"}`}>
+        <div className={`resultContainer ${resultSend ? "grid" : "hidden"}`}>
           <div className={`result ${resultSend ? "" : "hidden"}`}>
             {resultData && resultData.error ? (
               <div className="error-message text-center">
