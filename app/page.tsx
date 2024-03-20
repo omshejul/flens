@@ -1,113 +1,181 @@
-import Image from "next/image";
+"use client";
+import React, { useEffect, useRef, useState } from "react";
+import CaptureIcon from "./Icons/CaptureIcon";
+import CloseIcon from "./Icons/CloseIcon";
+import DoneIcon from "./Icons/DoneIcon";
+import "./page.css";
+type NutrientData = {
+  protein: string;
+  carbohydrates: string;
+  fats: string;
+  sugars: string;
+  calories: string;
+  other_nutrients: {
+    fiber: string;
+    sodium: string;
+    cholesterol: string;
+  };
+};
 
-export default function Home() {
+type ResultData = {
+  data: NutrientData;
+  suggestion?: string;
+} | null;
+const CameraApp: React.FC = () => {
+  const [captureState, setCaptureState] = useState(false);
+  const [resultSend, setResultSend] = useState(false);
+  const [resultData, setResultData] = useState<ResultData>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices
+        .getUserMedia({ video: { facingMode: "environment" } })
+        .then((stream) => {
+          if (videoRef.current) {
+            videoRef.current.srcObject = stream;
+            videoRef.current.play();
+          }
+        })
+        .catch((error: Error) => {
+          console.error("Error accessing the camera:", error);
+        });
+    }
+  }, []);
+
+  const capturePhoto = (): void => {
+    console.log("captured photo");
+
+    window.navigator.vibrate(20);
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    if (video && canvas && canvas.getContext) {
+      const context = canvas.getContext("2d");
+      if (context) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        setCaptureState(true);
+      }
+    }
+  };
+  const discardPhoto = (): void => {
+    setCaptureState(false);
+    setResultData(null);
+  };
+  const closeResult = (): void => {
+    setCaptureState(false);
+    setResultData(null);
+    setResultSend(false);
+  };
+  const sendPhoto = (): void => {
+    console.log("trying to send");
+    setCaptureState(false);
+    setResultSend(true);
+    if (!canvasRef.current) {
+      console.log("not working");
+      return;
+    }
+
+    const imageDataUrl = canvasRef.current.toDataURL("image/png");
+
+    const postData = {
+      image: imageDataUrl,
+    };
+    console.log(postData);
+
+    fetch("http://localhost:5001/flens", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        setResultData(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <>
+      <div className={`wrapper`}>
+        <video
+          ref={videoRef}
+          className={`canvas ${captureState ? "hidden" : ""} ${
+            resultData == null ? "" : "block"
+          }`}
+          autoPlay
+        ></video>
+        <button
+          onClick={discardPhoto}
+          className={`close-btn btn ${captureState ? "" : "hidden"}`}
+        >
+          <CloseIcon size={48} fill="#8d0606" />
+        </button>
+        <button
+          onClick={capturePhoto}
+          className={`capture-btn btn ${captureState ? "hidden" : ""}`}
+        >
+          <CaptureIcon size={48} fill="#333" />
+        </button>
+        <button
+          onClick={sendPhoto}
+          className={`send-btn btn ${captureState ? "" : "hidden"}`}
+        >
+          <DoneIcon size={48} fill="#11841d" />
+        </button>
+        <canvas
+          ref={canvasRef}
+          className={`canvas ${captureState ? "" : "hidden"}`}
+        ></canvas>
+        <div className={`result ${resultSend ? "" : "hidden"}`}>
+          {resultData &&
+          resultData.data &&
+          typeof resultData.data === "object" &&
+          Object.keys(resultData.data).length > 0 ? (
+            <>
+              <button onClick={closeResult} className="closeBtn">
+                <CloseIcon size={24} fill="#ffffff" />
+              </button>
+              <h2>Nutritional Information:&emsp;</h2>
+              <div className="pill">Protein: {resultData.data.protein}g</div>
+              <div className="pill">
+                Carbohydrates: {resultData.data.carbohydrates}g
+              </div>
+              <div className="pill">Fats: {resultData.data.fats}g</div>
+              <div className="pill">Sugars: {resultData.data.sugars}g</div>
+              <div className="pill">Calories: {resultData.data.calories}</div>
+              <h3>Other:</h3>
+              <ul>
+                <div className="pill">
+                  Fiber: {resultData.data.other_nutrients.fiber}g
+                </div>
+                <div className="pill">
+                  Sodium: {resultData.data.other_nutrients.sodium}g
+                </div>
+                <div className="pill">
+                  Cholesterol: {resultData.data.other_nutrients.cholesterol}g
+                </div>
+              </ul>
+              {resultData.suggestion && (
+                <div className="suggestion pill flex">
+                  {resultData.suggestion}
+                </div>
+              )}
+            </>
+          ) : (
+            <p>Loading...</p>
+          )}
         </div>
       </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    </>
   );
-}
+};
+
+export default CameraApp;
