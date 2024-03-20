@@ -144,23 +144,23 @@ const CameraApp: React.FC = () => {
                 <CloseIcon size={24} fill="#ffffff" />
               </button>
               <h2>Nutritional Information:&emsp;</h2>
-              <div className="pill">Protein: {resultData.data.protein}g</div>
+              <div className="pill">Protein: {resultData.data.protein}</div>
               <div className="pill">
-                Carbohydrates: {resultData.data.carbohydrates}g
+                Carbohydrates: {resultData.data.carbohydrates}
               </div>
-              <div className="pill">Fats: {resultData.data.fats}g</div>
-              <div className="pill">Sugars: {resultData.data.sugars}g</div>
-              <div className="pill">Calories: {resultData.data.calories}</div>
+              <div className="pill">Fats: {resultData.data.fats}</div>
+              <div className="pill">Sugars: {resultData.data.sugars}</div>
+              <div className="pill">Calories: {resultData.data.calories}kcal</div>
               <h3>Other:</h3>
               <ul>
                 <div className="pill">
-                  Fiber: {resultData.data.other_nutrients.fiber}g
+                  Fiber: {resultData.data.other_nutrients.fiber}
                 </div>
                 <div className="pill">
-                  Sodium: {resultData.data.other_nutrients.sodium}g
+                  Sodium: {resultData.data.other_nutrients.sodium}
                 </div>
                 <div className="pill">
-                  Cholesterol: {resultData.data.other_nutrients.cholesterol}g
+                  Cholesterol: {resultData.data.other_nutrients.cholesterol}
                 </div>
               </ul>
               {resultData.suggestion && (
