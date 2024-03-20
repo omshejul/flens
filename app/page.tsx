@@ -4,6 +4,7 @@ import { FadeLoader } from "react-spinners";
 import CaptureIcon from "./Icons/CaptureIcon";
 import CloseIcon from "./Icons/CloseIcon";
 import DoneIcon from "./Icons/DoneIcon";
+import SwitchCameraIcon from "./Icons/SwitchCameraIcon";
 import "./page.css";
 type NutrientData = {
   protein: string;
@@ -24,6 +25,8 @@ type ResultData = {
   error?: string;
 } | null;
 const CameraApp: React.FC = () => {
+
+  const [facingMode, setFacingMode] = useState("environment");
   const [captureState, setCaptureState] = useState(false);
   const [resultSend, setResultSend] = useState(false);
   const [resultData, setResultData] = useState<ResultData>(null);
@@ -31,10 +34,22 @@ const CameraApp: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
+    // Function to stop all tracks on the stream
+    const stopMediaTracks = (stream: MediaStream) => {
+      stream.getTracks().forEach((track: MediaStreamTrack) => {
+        track.stop();
+      });
+    };
+  
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices
-        .getUserMedia({ video: { facingMode: "environment" } })
-        .then((stream) => {
+        .getUserMedia({ video: { facingMode: facingMode } })
+        .then((stream: MediaStream) => {
+          // If there's a video stream already playing, stop all its tracks
+          if (videoRef.current && videoRef.current.srcObject) {
+            stopMediaTracks(videoRef.current.srcObject as MediaStream);
+          }
+  
           if (videoRef.current) {
             videoRef.current.srcObject = stream;
             videoRef.current.play();
@@ -44,7 +59,16 @@ const CameraApp: React.FC = () => {
           console.error("Error accessing the camera:", error);
         });
     }
-  }, []);
+  
+    // Return a cleanup function that stops all tracks when the component unmounts
+    // or before running the effect again
+    return () => {
+      if (videoRef.current && videoRef.current.srcObject) {
+        stopMediaTracks(videoRef.current.srcObject as MediaStream);
+      }
+    };
+  }, [facingMode]); // Include facingMode in the dependency array
+  
 
   const capturePhoto = (): void => {
     console.log("captured photo");
@@ -66,6 +90,16 @@ const CameraApp: React.FC = () => {
     setCaptureState(false);
     setResultData(null);
   };
+  const changeFacingMode = (): void => {
+    console.log("facingMode:"+facingMode);
+    
+    if (facingMode == "environment") {
+      setFacingMode("user")
+    }
+    if (facingMode == "user") {
+      setFacingMode("environment")
+    }
+  }
   const closeResult = (): void => {
     setCaptureState(false);
     setResultData(null);
@@ -119,6 +153,12 @@ const CameraApp: React.FC = () => {
           className={`close-btn btn ${captureState ? "" : "hidden"}`}
         >
           <CloseIcon size={48} fill="#8d0606" />
+        </button>
+        <button
+          onClick={changeFacingMode}
+          className={`facing-mode-btn btn ${captureState ? "hidden" : ""}`}
+        >
+          <SwitchCameraIcon size={48} fill="#333" />
         </button>
         <button
           onClick={capturePhoto}
