@@ -75,6 +75,7 @@
   border-radius: 1rem;
 }
 .result .suggestion {
+  padding-block: 0.5rem;
   border-radius: 1rem;
 }
 .result .closeBtn {
@@ -83,6 +84,8 @@
   right: 0;
   margin: 0.5rem;
   background: #7F0609;
+  border: 1.75px solid #ff756d;
+  box-shadow: 0 0 2rem rgba(0, 0, 0, 0.25);
   border-radius: 50vw;
   padding: 0.2rem;
 }

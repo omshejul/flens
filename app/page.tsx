@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
+import { FadeLoader } from "react-spinners";
 import CaptureIcon from "./Icons/CaptureIcon";
 import CloseIcon from "./Icons/CloseIcon";
 import DoneIcon from "./Icons/DoneIcon";
@@ -172,7 +173,7 @@ const CameraApp: React.FC = () => {
               )}
             </>
           ) : (
-            <p className="loading">Loading...</p>
+            <p className="loading flex justify-center items-center text-center"><FadeLoader color="#ffffff" /></p>
           )}
         </div>
       </div>
