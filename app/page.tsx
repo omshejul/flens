@@ -26,6 +26,7 @@ type ResultData = {
 } | null;
 const CameraApp: React.FC = () => {
   const [facingMode, setFacingMode] = useState("environment");
+  const [isCameraLoading, setIsCameraLoading] = useState(true);
   const [captureState, setCaptureState] = useState(false);
   const [resultSend, setResultSend] = useState(false);
   const [resultData, setResultData] = useState<ResultData>(null);
@@ -33,6 +34,12 @@ const CameraApp: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.onloadedmetadata = () => {
+        // When the metadata has loaded, set the loading state to false
+        setIsCameraLoading(false);
+      };
+    }
     // Function to stop all tracks on the stream
     const stopMediaTracks = (stream: MediaStream) => {
       stream.getTracks().forEach((track: MediaStreamTrack) => {
@@ -120,7 +127,7 @@ const CameraApp: React.FC = () => {
     console.log(postData);
 
     fetch("https://arthkin.el.r.appspot.com/flens", {
-    // fetch("http://localhost:5001/flens", {
+      // fetch("http://localhost:5001/flens", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -148,11 +155,16 @@ const CameraApp: React.FC = () => {
             }`}
             autoPlay
           ></video>
-                  <canvas
+          <canvas
             ref={canvasRef}
             className={`canvas ${captureState ? "" : "hidden"}`}
           ></canvas>
         </div>
+        {isCameraLoading && (
+          <div className="loading absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-10">
+            <FadeLoader color="#ffffff" />
+          </div>
+        )}
         <button
           onClick={discardPhoto}
           className={`close-btn btn ${captureState ? "flex" : "hidden"}`}
