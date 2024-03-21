@@ -120,6 +120,7 @@ const CameraApp: React.FC = () => {
     console.log(postData);
 
     fetch("https://arthkin.el.r.appspot.com/flens", {
+    // fetch("http://localhost:5001/flens", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -139,13 +140,19 @@ const CameraApp: React.FC = () => {
   return (
     <>
       <div className={`wrapper`}>
-        <video
-          ref={videoRef}
-          className={`canvas ${captureState ? "hidden" : ""} ${
-            resultData == null ? "" : "block"
-          }`}
-          autoPlay
-        ></video>
+        <div className="videoWrapper">
+          <video
+            ref={videoRef}
+            className={`canvas ${captureState ? "hidden" : ""} ${
+              resultData == null ? "" : "block"
+            }`}
+            autoPlay
+          ></video>
+                  <canvas
+            ref={canvasRef}
+            className={`canvas ${captureState ? "" : "hidden"}`}
+          ></canvas>
+        </div>
         <button
           onClick={discardPhoto}
           className={`close-btn btn ${captureState ? "flex" : "hidden"}`}
@@ -172,10 +179,7 @@ const CameraApp: React.FC = () => {
           <div className="label">Upload</div>
           <DoneIcon size={36} fill="#11841d" />
         </button>
-        <canvas
-          ref={canvasRef}
-          className={`canvas ${captureState ? "" : "hidden"}`}
-        ></canvas>
+
         <div className={`resultContainer ${resultSend ? "grid" : "hidden"}`}>
           <div className={`result ${resultSend ? "" : "hidden"}`}>
             {resultData && resultData.error ? (
@@ -216,7 +220,7 @@ const CameraApp: React.FC = () => {
                 )}
               </>
             ) : (
-              <p className="loading flex justify-center items-center text-center">
+              <p className="loading p-10 ">
                 <FadeLoader color="#ffffff" />
               </p>
             )}
