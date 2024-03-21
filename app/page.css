@@ -9,7 +9,7 @@
   border-radius: 1rem;
   overflow: hidden;
   border: 5px solid hsla(0, 0%, 50%, 0.5);
-
+  box-shadow: 0 0 2rem rgba(0, 0, 0, 0.5);
 }
 .canvas{
   height: 100%;

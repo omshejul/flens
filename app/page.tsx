@@ -20,6 +20,7 @@ type NutrientData = {
 };
 
 type ResultData = {
+  name: string;
   data: NutrientData;
   suggestion?: string;
   error?: string;
@@ -204,29 +205,28 @@ const CameraApp: React.FC = () => {
                   <CloseIcon size={24} fill="#ff756d" />
                 </button>
                 <h2>Nutritional Information:&emsp;</h2>
-                <div className="pill">Protein: {resultData.data.protein}</div>
-                <div className="pill">
+                <div className="font-semibold m-2 text-xl">{resultData.name}</div>
+                <div className="pill tracking-tight">Protein: {resultData.data.protein}</div>
+                <div className="pill tracking-tight">
                   Carbohydrates: {resultData.data.carbohydrates}
                 </div>
-                <div className="pill">Fats: {resultData.data.fats}</div>
-                <div className="pill">Sugars: {resultData.data.sugars}</div>
-                <div className="pill">
-                  Calories: {resultData.data.calories} kcal
-                </div>
+                <div className="pill tracking-tight">Fats: {resultData.data.fats}</div>
+                <div className="pill tracking-tight">Sugars: {resultData.data.sugars}</div>
+                <div className="pill tracking-tight">Calories: {resultData.data.calories}</div>
                 <h3>Other:</h3>
                 <div className="other-container">
-                  <div className="pill">
+                  <div className="pill tracking-tight">
                     Fiber: {resultData.data.other_nutrients.fiber}
                   </div>
-                  <div className="pill">
+                  <div className="pill tracking-tight">
                     Sodium: {resultData.data.other_nutrients.sodium}
                   </div>
-                  <div className="pill">
+                  <div className="pill tracking-tight">
                     Cholesterol: {resultData.data.other_nutrients.cholesterol}
                   </div>
                 </div>
                 {resultData.suggestion && (
-                  <div className="suggestion pill flex">
+                  <div className="suggestion pill tracking-tight flex">
                     {resultData.suggestion}
                   </div>
                 )}
