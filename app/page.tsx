@@ -136,7 +136,7 @@ const CameraApp: React.FC = () => {
     console.log(postData);
 
     // fetch("https://arthk4in.el.r.appspot.com/flens", {
-    fetch("http://localhost:5001/flen", {
+    fetch("http://localhost:5001/flens", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
