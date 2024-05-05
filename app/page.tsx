@@ -205,7 +205,7 @@ const CameraApp: React.FC = () => {
           <DoneIcon size={36} fill="#11841d" />
         </button> */}
         <div className={`${captureState ? "flex" : "hidden"} inputContainer  result absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col max-w-md text-white`}>
-          <label htmlFor="name" className="py-2">What's this dish called?</label>
+          <label htmlFor="name" className="py-2">What is this dish called?</label>
           <input
             type="name"
             id="name"
