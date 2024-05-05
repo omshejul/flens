@@ -5,6 +5,7 @@ import CaptureIcon from "./Icons/CaptureIcon";
 import CloseIcon from "./Icons/CloseIcon";
 import DoneIcon from "./Icons/DoneIcon";
 import SwitchCameraIcon from "./Icons/SwitchCameraIcon";
+import { isIOS, isSafari } from 'react-device-detect';
 import "./page.css";
 type NutrientData = {
   protein: string;
@@ -29,12 +30,18 @@ const CameraApp: React.FC = () => {
   const [facingMode, setFacingMode] = useState("environment");
   const [isCameraLoading, setIsCameraLoading] = useState(true);
   const [captureState, setCaptureState] = useState(false);
+  const [dishName, setDishName] = useState('');
   const [resultSend, setResultSend] = useState(false);
   const [resultData, setResultData] = useState<ResultData>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    if (isIOS) {
+      setIsVisible(true);
+
+    }
     if (videoRef.current) {
       videoRef.current.onloadedmetadata = () => {
         // When the metadata has loaded, set the loading state to false
@@ -123,12 +130,13 @@ const CameraApp: React.FC = () => {
     const imageDataUrl = canvasRef.current.toDataURL("image/png");
 
     const postData = {
+      dishName: dishName,
       image: imageDataUrl,
     };
     console.log(postData);
 
-    fetch("https://arthkin.el.r.appspot.com/flens", {
-      // fetch("http://localhost:5001/flens", {
+    // fetch("https://arthk4in.el.r.appspot.com/flens", {
+    fetch("http://localhost:5001/flen", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -147,13 +155,17 @@ const CameraApp: React.FC = () => {
 
   return (
     <>
+      {isVisible && (
+        <div className="popup result absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-10 ">
+          <div className="content">Not supported in iOS</div>
+        </div>
+      )}
       <div className={`wrapper`}>
         <div className="videoWrapper">
           <video
             ref={videoRef}
-            className={`canvas ${captureState ? "hidden" : ""} ${
-              resultData == null ? "" : "block"
-            }`}
+            className={`canvas ${captureState ? "hidden" : ""} ${resultData == null ? "" : "block"
+              }`}
             autoPlay
           ></video>
           <canvas
@@ -185,13 +197,35 @@ const CameraApp: React.FC = () => {
         >
           <CaptureIcon size={48} fill="#333" />
         </button>
-        <button
+        {/* <button
           onClick={sendPhoto}
           className={`send-btn btn ${captureState ? "flex" : "hidden"}`}
         >
           <div className="label">Upload</div>
           <DoneIcon size={36} fill="#11841d" />
-        </button>
+        </button> */}
+        <div className={`${captureState ? "flex" : "hidden"} inputContainer  result absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col max-w-md text-white`}>
+          <label htmlFor="name" className="py-2">What's this dish called?</label>
+          <input
+            type="name"
+            id="name"
+            value={dishName}
+            onChange={(e) => setDishName(e.target.value)}
+            className=" text-black shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            placeholder="Enter name of the Dish"
+          />
+          <div className="popBtnContainer flex w-full justify-around mt-5">
+            <button onClick={sendPhoto} className={`popupBtn flex border rounded-lg p-2 items-center justify-center`}>
+              <div className="label">Skip</div>
+              <CloseIcon size={20} fill="#ffffff" />
+            </button>
+            <button onClick={sendPhoto} className={`popupBtn flex border rounded-lg p-2 items-center justify-center`}>
+              <div className="label">Send</div>
+              <DoneIcon size={20} fill="#ffffff" />
+            </button>
+          </div>
+
+        </div>
 
         <div className={`resultContainer ${resultSend ? "grid" : "hidden"}`}>
           <div className={`result ${resultSend ? "" : "hidden"}`}>
@@ -205,14 +239,24 @@ const CameraApp: React.FC = () => {
                   <CloseIcon size={24} fill="#ff756d" />
                 </button>
                 <h2>Nutritional Information:&emsp;</h2>
-                <div className="font-semibold m-2 text-xl">{resultData.name}</div>
-                <div className="pill tracking-tight">Protein: {resultData.data.protein}</div>
+                <div className="font-semibold m-2 text-xl">
+                  {resultData.name}
+                </div>
+                <div className="pill tracking-tight">
+                  Protein: {resultData.data.protein}
+                </div>
                 <div className="pill tracking-tight">
                   Carbohydrates: {resultData.data.carbohydrates}
                 </div>
-                <div className="pill tracking-tight">Fats: {resultData.data.fats}</div>
-                <div className="pill tracking-tight">Sugars: {resultData.data.sugars}</div>
-                <div className="pill tracking-tight">Calories: {resultData.data.calories}</div>
+                <div className="pill tracking-tight">
+                  Fats: {resultData.data.fats}
+                </div>
+                <div className="pill tracking-tight">
+                  Sugars: {resultData.data.sugars}
+                </div>
+                <div className="pill tracking-tight">
+                  Calories: {resultData.data.calories}
+                </div>
                 <h3>Other:</h3>
                 <div className="other-container">
                   <div className="pill tracking-tight">
@@ -232,7 +276,7 @@ const CameraApp: React.FC = () => {
                 )}
               </>
             ) : (
-              <p className="loading p-10 ">
+              <p className="loading p-10">
                 <FadeLoader color="#ffffff" />
               </p>
             )}
