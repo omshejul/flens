@@ -36,6 +36,17 @@ const CameraApp: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCount((prevCount) => prevCount - 1);
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [setCount]);
 
   useEffect(() => {
     if (isIOS) {
@@ -63,7 +74,6 @@ const CameraApp: React.FC = () => {
           if (videoRef.current && videoRef.current.srcObject) {
             stopMediaTracks(videoRef.current.srcObject as MediaStream);
           }
-
           if (videoRef.current) {
             videoRef.current.srcObject = stream;
             videoRef.current.play();
@@ -122,6 +132,7 @@ const CameraApp: React.FC = () => {
     console.log("trying to send");
     setCaptureState(false);
     setResultSend(true);
+    setCount(30)
     if (!canvasRef.current) {
       console.log("not working");
       return;
@@ -135,8 +146,8 @@ const CameraApp: React.FC = () => {
     };
     console.log(postData);
 
-    // fetch("https://arthk4in.el.r.appspot.com/flens", {
-    fetch("http://localhost:5001/flens", {
+    fetch("https://arthk4in.el.r.appspot.com/flens", {
+      // fetch("http://localhost:5001/flens", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -182,8 +193,8 @@ const CameraApp: React.FC = () => {
           onClick={discardPhoto}
           className={`close-btn btn ${captureState ? "flex" : "hidden"}`}
         >
-          <div className="label">Discard</div>
-          <CloseIcon size={36} fill="#8d0606" />
+          <div className="label text-red-300">Discard</div>
+          <CloseIcon size={36} fill="rgb(252 165 165)" />
         </button>
         <button
           onClick={changeFacingMode}
@@ -195,7 +206,7 @@ const CameraApp: React.FC = () => {
           onClick={capturePhoto}
           className={`capture-btn btn ${captureState ? "hidden" : "flex"}`}
         >
-          <CaptureIcon size={48} fill="#333" />
+          <CaptureIcon size={48} fill="#ffffff" />
         </button>
         {/* <button
           onClick={sendPhoto}
@@ -214,13 +225,13 @@ const CameraApp: React.FC = () => {
             className=" text-black shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             placeholder="Enter name of the Dish"
           />
-          <div className="popBtnContainer flex w-full justify-around mt-5">
-            <button onClick={sendPhoto} className={`popupBtn flex border rounded-lg p-2 items-center justify-center`}>
-              <div className="label">Skip</div>
+          <div className="popBtnContainer flex w-full justify-around mt-2">
+            <button onClick={sendPhoto} className={`popupBtn flex border-custom bg-[#0000003d] rounded-full p-2 px-4 m-2 items-center justify-center bg`}>
+              <div className="label mr-2">Skip</div>
               <CloseIcon size={20} fill="#ffffff" />
             </button>
-            <button onClick={sendPhoto} className={`popupBtn flex border rounded-lg p-2 items-center justify-center`}>
-              <div className="label">Send</div>
+            <button onClick={sendPhoto} className={`popupBtn flex border-custom bg-[#0000003d] rounded-full p-2 px-4 m-2 items-center justify-center bg `}>
+              <div className="label mr-2">Send</div>
               <DoneIcon size={20} fill="#ffffff" />
             </button>
           </div>
@@ -276,11 +287,12 @@ const CameraApp: React.FC = () => {
                 )}
               </>
             ) : (
-              <p className="loading p-10">
+              <div className="loading p-10 grid place-items-center ">
                 <FadeLoader color="#ffffff" />
-              </p>
+                <span className="text-2xl border-custom p-2 px-4 mt-8 rounded-full">{count}</span>
+              </div>
             )}
-          </div>{" "}
+          </div>
         </div>
       </div>
     </>

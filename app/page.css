@@ -11,12 +11,14 @@
   border: 2px solid hsla(0, 0%, 50%, 0.5);
   box-shadow: 0 0 2rem rgba(0, 0, 0, 0.5);
 }
-.canvas{
+
+.canvas {
   height: 100%;
   width: 100%;
   object-fit: contain;
   object-position: center;
 }
+
 .btn {
   position: absolute;
   place-items: center;
@@ -25,35 +27,41 @@
   transform: translateX(-50%);
   border-radius: 100vh;
   padding: 1rem;
-  background-color: rgba(241, 241, 241, 0.8);
-  border: 2px solid white;
+  background-color: #333;
+  border: 2px solid rgb(85, 85, 85);
   transition: all 50ms ease-in-out;
   box-shadow: 0 0 2rem rgba(0, 0, 0, 0.5);
 }
+
 .btn:active {
   background-color: rgb(255, 255, 255);
   transform: translate(-50%, 2px);
   transition: all 50ms ease-in-out;
 }
-.btn > svg{
+
+.btn>svg {
   padding: 0.25rem;
 }
+
 .wrapper {
   height: 100svh;
   height: 100cqb;
 }
+
 .close-btn {
-  background-color: rgb(250, 75, 75);
-  border: 2px solid hsla(0, 0%, 0%, 0.5);
+  background-color: #333;
+  border: 2px solid rgb(85, 85, 85);
   padding: 0.5rem 1rem;
   left: calc(1 / 4 * 100%);
 }
+
 .facing-mode-btn {
   background-color: #333;
   border: 2px solid rgb(85, 85, 85);
   scale: 0.75;
   left: calc(1 / 4 * 100%);
 }
+
 .send-btn {
   background-color: rgb(102, 255, 117);
   border: 2px solid hsla(0, 0%, 0%, 0.5);
@@ -61,8 +69,9 @@
 
   left: calc(3 / 4 * 100%);
 }
-.resultContainer{
-justify-content: center;
+
+.resultContainer {
+  justify-content: center;
   position: absolute;
   width: 100%;
   top: 0%;
@@ -72,6 +81,7 @@ justify-content: center;
   overflow-y: scroll;
   z-index: 2;
 }
+
 .result {
   max-width: min(30rem, 90vw);
   margin-block: 1rem;
@@ -84,10 +94,12 @@ justify-content: center;
   border-radius: 1rem;
   color: white;
 }
-.result > h2 {
+
+.result>h2 {
   margin: 0.5rem;
   font-size: 2rem;
 }
+
 .result .pill {
   padding: 0.25rem 0.5rem;
   margin: 0.25rem 0;
@@ -96,10 +108,12 @@ justify-content: center;
   max-width: max-content;
   border-radius: 1rem;
 }
+
 .result .suggestion {
   padding-block: 0.5rem;
   border-radius: 1rem;
 }
+
 .result .closeBtn {
   position: absolute;
   top: 0;
@@ -110,4 +124,7 @@ justify-content: center;
   box-shadow: 0 0 2rem rgba(0, 0, 0, 0.25);
   border-radius: 50vw;
   padding: 0.25rem;
+}
+.border-custom{
+  border: 2px solid rgb(85, 85, 85);
 }
