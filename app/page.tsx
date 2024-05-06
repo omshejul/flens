@@ -146,13 +146,14 @@ const CameraApp: React.FC = () => {
     };
     console.log(postData);
 
-    fetch("https://arthk4in.el.r.appspot.com/flens", {
+    fetch("https://arthkin.el.r.appspot.com/flens", {
       // fetch("http://localhost:5001/flens", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(postData),
+      mode: 'cors'
     })
       .then((response) => response.json())
       .then((data) => {
