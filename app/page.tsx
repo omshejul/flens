@@ -5,7 +5,7 @@ import CaptureIcon from "./Icons/CaptureIcon";
 import CloseIcon from "./Icons/CloseIcon";
 import DoneIcon from "./Icons/DoneIcon";
 import SwitchCameraIcon from "./Icons/SwitchCameraIcon";
-import { isIOS, isSafari } from 'react-device-detect';
+import { isIOS, isSafari } from "react-device-detect";
 import "./page.css";
 type NutrientData = {
   protein: string;
@@ -30,9 +30,9 @@ const CameraApp: React.FC = () => {
   const [facingMode, setFacingMode] = useState("environment");
   const [isCameraLoading, setIsCameraLoading] = useState(true);
   const [captureState, setCaptureState] = useState(false);
-  const [dishName, setDishName] = useState('');
+  const [dishName, setDishName] = useState("");
   const [resultSend, setResultSend] = useState(false);
-  const [resultData, setResultData] = useState<ResultData>(null);
+  const [resultData, setResultData] = useState<any>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -51,7 +51,6 @@ const CameraApp: React.FC = () => {
   useEffect(() => {
     if (isIOS) {
       setIsVisible(true);
-
     }
     if (videoRef.current) {
       videoRef.current.onloadedmetadata = () => {
@@ -132,7 +131,7 @@ const CameraApp: React.FC = () => {
     console.log("trying to send");
     setCaptureState(false);
     setResultSend(true);
-    setCount(30)
+    setCount(30);
     if (!canvasRef.current) {
       console.log("not working");
       return;
@@ -146,14 +145,14 @@ const CameraApp: React.FC = () => {
     };
     console.log(postData);
 
-    fetch("https://arthkin.el.r.appspot.com/flens", {
-      // fetch("http://localhost:5001/flens", {
+    // fetch("https://arthkin.el.r.appspot.com/flens", {
+    fetch("http://localhost:5001/flens", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(postData),
-      mode: 'cors'
+      mode: "cors",
     })
       .then((response) => response.json())
       .then((data) => {
@@ -176,8 +175,9 @@ const CameraApp: React.FC = () => {
         <div className="videoWrapper">
           <video
             ref={videoRef}
-            className={`canvas ${captureState ? "hidden" : ""} ${resultData == null ? "" : "block"
-              }`}
+            className={`canvas ${captureState ? "hidden" : ""} ${
+              resultData == null ? "" : "block"
+            }`}
             autoPlay
           ></video>
           <canvas
@@ -216,8 +216,14 @@ const CameraApp: React.FC = () => {
           <div className="label">Upload</div>
           <DoneIcon size={36} fill="#11841d" />
         </button> */}
-        <div className={`${captureState ? "flex" : "hidden"} inputContainer  result absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col max-w-md text-white`}>
-          <label htmlFor="name" className="py-2">What is this dish called?</label>
+        <div
+          className={`${
+            captureState ? "flex" : "hidden"
+          } inputContainer  result absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col max-w-md text-white`}
+        >
+          <label htmlFor="name" className="py-2">
+            What is this dish called?
+          </label>
           <input
             type="name"
             id="name"
@@ -227,16 +233,21 @@ const CameraApp: React.FC = () => {
             placeholder="Enter name of the Dish"
           />
           <div className="popBtnContainer flex w-full justify-around mt-2">
-            <button onClick={sendPhoto} className={`popupBtn flex border-custom bg-[#0000003d] rounded-full p-2 px-4 m-2 items-center justify-center bg`}>
+            <button
+              onClick={sendPhoto}
+              className={`popupBtn flex border-custom bg-[#0000003d] rounded-full p-2 px-4 m-2 items-center justify-center bg`}
+            >
               <div className="label mr-2">Skip</div>
               <CloseIcon size={20} fill="#ffffff" />
             </button>
-            <button onClick={sendPhoto} className={`popupBtn flex border-custom bg-[#0000003d] rounded-full p-2 px-4 m-2 items-center justify-center bg `}>
+            <button
+              onClick={sendPhoto}
+              className={`popupBtn flex border-custom bg-[#0000003d] rounded-full p-2 px-4 m-2 items-center justify-center bg `}
+            >
               <div className="label mr-2">Send</div>
               <DoneIcon size={20} fill="#ffffff" />
             </button>
           </div>
-
         </div>
 
         <div className={`resultContainer ${resultSend ? "grid" : "hidden"}`}>
@@ -245,52 +256,33 @@ const CameraApp: React.FC = () => {
               <div className="error-message text-center">
                 {resultData.error}
               </div>
-            ) : resultData && resultData.data ? (
+            ) : resultData ? (
               <>
                 <button onClick={closeResult} className="closeBtn">
                   <CloseIcon size={24} fill="#ff756d" />
                 </button>
                 <h2>Nutritional Information:&emsp;</h2>
-                <div className="font-semibold m-2 text-xl">
-                  {resultData.name}
-                </div>
-                <div className="pill tracking-tight">
-                  Protein: {resultData.data.protein}
-                </div>
-                <div className="pill tracking-tight">
-                  Carbohydrates: {resultData.data.carbohydrates}
-                </div>
-                <div className="pill tracking-tight">
-                  Fats: {resultData.data.fats}
-                </div>
-                <div className="pill tracking-tight">
-                  Sugars: {resultData.data.sugars}
-                </div>
-                <div className="pill tracking-tight">
-                  Calories: {resultData.data.calories}
-                </div>
-                <h3>Other:</h3>
-                <div className="other-container">
-                  <div className="pill tracking-tight">
-                    Fiber: {resultData.data.other_nutrients.fiber}
+                {resultData.map((data: any) => (
+                  <div className="pill" key={data.name}>
+                    {/* Ensure unique key for list items */}
+                    <div className="font-semibold m-2 text-xl">{data.name}</div>
+                    <div className="pill tracking-tight">
+                      Calories: {data.data.calories} kcal
+                    </div>
+                    {data.suggestion && ( // Ensure this accesses the suggestion of each data item
+                      <div className="suggestion pill tracking-tight flex">
+                        {data.suggestion}
+                      </div>
+                    )}
                   </div>
-                  <div className="pill tracking-tight">
-                    Sodium: {resultData.data.other_nutrients.sodium}
-                  </div>
-                  <div className="pill tracking-tight">
-                    Cholesterol: {resultData.data.other_nutrients.cholesterol}
-                  </div>
-                </div>
-                {resultData.suggestion && (
-                  <div className="suggestion pill tracking-tight flex">
-                    {resultData.suggestion}
-                  </div>
-                )}
+                ))}
               </>
             ) : (
               <div className="loading p-10 grid place-items-center ">
                 <FadeLoader color="#ffffff" />
-                <span className="text-2xl border-custom p-2 px-4 mt-8 rounded-full">{count}</span>
+                {/* <span className="text-2xl border-custom p-2 px-4 mt-8 rounded-full">
+                  {count}
+                </span> */}
               </div>
             )}
           </div>
