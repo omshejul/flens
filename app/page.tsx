@@ -271,7 +271,7 @@ const CameraApp: React.FC = () => {
 
                         <div className="font-semibold m-2 text-xl">{data.name}</div>
                         <div className="pill tracking-tight">
-                          Calories: {data.data.calories} kcal
+                          Calories: {data.calories} kcal
                         </div>
                         {data.suggestion && ( // Ensure this accesses the suggestion of each data item
                           <div className="suggestion pill tracking-tight flex">
