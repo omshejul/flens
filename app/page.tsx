@@ -146,7 +146,7 @@ const CameraApp: React.FC = () => {
     console.log(postData);
 
     fetch("https://arthkin.el.r.appspot.com/flens", {
-    // fetch("http://localhost:5001/flens", {
+      // fetch("http://localhost:5001/flens", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -175,9 +175,8 @@ const CameraApp: React.FC = () => {
         <div className="videoWrapper">
           <video
             ref={videoRef}
-            className={`canvas ${captureState ? "hidden" : ""} ${
-              resultData == null ? "" : "block"
-            }`}
+            className={`canvas ${captureState ? "hidden" : ""} ${resultData == null ? "" : "block"
+              }`}
             autoPlay
           ></video>
           <canvas
@@ -217,9 +216,8 @@ const CameraApp: React.FC = () => {
           <DoneIcon size={36} fill="#11841d" />
         </button> */}
         <div
-          className={`${
-            captureState ? "flex" : "hidden"
-          } inputContainer  result absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col max-w-md text-white`}
+          className={`${captureState ? "flex" : "hidden"
+            } inputContainer  result absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col max-w-md text-white`}
         >
           <label htmlFor="name" className="py-2">
             What is this dish called?
@@ -265,14 +263,22 @@ const CameraApp: React.FC = () => {
                 {resultData.map((data: any) => (
                   <div className="pill" key={data.name}>
                     {/* Ensure unique key for list items */}
-                    <div className="font-semibold m-2 text-xl">{data.name}</div>
-                    <div className="pill tracking-tight">
-                      Calories: {data.data.calories} kcal
-                    </div>
-                    {data.suggestion && ( // Ensure this accesses the suggestion of each data item
-                      <div className="suggestion pill tracking-tight flex">
-                        {data.suggestion}
-                      </div>
+                    {data.overall_suggestion && (
+                        <div className="font-semibold m-2 text-xl">{data.overall_suggestion}</div>
+                      )}
+                    {data.name && (
+                      <>
+
+                        <div className="font-semibold m-2 text-xl">{data.name}</div>
+                        <div className="pill tracking-tight">
+                          Calories: {data.data.calories} kcal
+                        </div>
+                        {data.suggestion && ( // Ensure this accesses the suggestion of each data item
+                          <div className="suggestion pill tracking-tight flex">
+                            {data.suggestion}
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                 ))}
